@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kirim Dukungan - WebsiteKu</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0d0f12; color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .donate-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 28px 20px; width: 100%; max-width: 420px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); }
+    .profile-header { text-align: center; margin-bottom: 20px; }
+    .avatar { width: 70px; height: 70px; border-radius: 50%; background: #f59e0b; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 28px; font-weight: bold; color: #0d0f12; }
+    .profile-header h2 { font-size: 20px; color: #fff; }
+    .profile-header p { font-size: 13px; color: #8b949e; margin-top: 4px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; font-weight: 500; color: #c9d1d9; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+    input:focus, textarea:focus { border-color: #f59e0b; }
+    .quick-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    .btn-amount { background: #21262d; border: 1px solid #30363d; color: #fff; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; text-align: center; }
+    .btn-amount:hover { border-color: #f59e0b; color: #f59e0b; }
+    .btn-pay { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 8px; color: #0d0f12; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    .btn-pay:hover { background: #d97706; }
+  </style>
+</head>
+<body>
+
+  <div class="donate-card">
+    <div class="profile-header">
+      <div class="avatar" id="creatorAvatar">J</div>
+      <h2 id="creatorName">Jelyzx</h2>
+      <p>Dukung kreator ini untuk terus berkarya!</p>
+    </div>
+
+    <form action="/api/donate" method="POST">
+      <input type="hidden" name="target" value="jelyzx">
+
+      <div class="form-group">
+        <label for="sender">Nama Pengirim</label>
+        <input type="text" id="sender" name="sender" placeholder="Nama kamu atau Anonim" required>
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Jumlah Dukungan (Rp)</label>
+        <input type="number" id="amount" name="amount" placeholder="10000" min="1000" required>
+        <div class="quick-amounts">
+          <button type="button" class="btn-amount" onclick="document.getElementById('amount').value=10000">Rp 10rb</button>
+          <button type="button" class="btn-amount" onclick="document.getElementById('amount').value=25000">Rp 25rb</button>
+          <button type="button" class="btn-amount" onclick="document.getElementById('amount').value=50000">Rp 50rb</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Pesan Dukungan</label>
+        <textarea id="message" name="message" rows="3" placeholder="Semangat terus bikin kontennya!"></textarea>
+      </div>
+
+      <button type="submit" class="btn-pay">Kirim Dukungan Sekarang</button>
+    </form>
+  </div>
+
+  <script>
+    // Menyesuaikan nama dari URL (misal: /jelyzx)
+    const username = window.location.pathname.replace('/', '') || 'jelyzx';
+    document.getElementById('creatorName').innerText = username;
+    document.getElementById('creatorAvatar').innerText = username.charAt(0).toUpperCase();
+  </script>
+</body>
+</html>
