@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Replay Support — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Replay Support</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Segera Hadir</h2>
+        <p class="desc">Fitur untuk memutar ulang alert dukungan yang terlewat saat live belum diimplementasikan. Data donasi sudah tersimpan lengkap di database (lihat Riwayat Transaksi), jadi tinggal dibuatkan endpoint "replay" yang mengirim ulang event ke overlay lewat SSE.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+</body>
+</html>

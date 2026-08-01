@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blokir Media & IP — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Blokir Media & IP</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Blokir Alamat IP</h2>
+        <p class="desc">Cegah IP tertentu mengirim dukungan ke halamanmu.</p>
+        <form id="ipForm" style="display:flex;gap:8px;">
+          <input type="text" id="ipInput" placeholder="mis. 103.10.xx.xx" style="flex:1;">
+          <button class="btn" type="submit">Blokir</button>
+        </form>
+        <div id="ipList" style="margin-top:16px;"></div>
+        <div class="empty" id="ipEmpty" style="display:none;">Belum ada IP yang diblokir.</div>
+      </div>
+      <div class="card">
+        <h2>Blokir Media (Mediashare)</h2>
+        <p class="desc">Blokir URL/channel tertentu supaya tidak bisa diputar lewat fitur mediashare.</p>
+        <form id="mediaForm" style="display:flex;gap:8px;">
+          <input type="text" id="mediaInput" placeholder="mis. youtube.com/@channel" style="flex:1;">
+          <button class="btn" type="submit">Blokir</button>
+        </form>
+        <div id="mediaList" style="margin-top:16px;"></div>
+        <div class="empty" id="mediaEmpty" style="display:none;">Belum ada media yang diblokir.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  async function load() {
+    const res = await fetch("/api/dashboard/blocked");
+    const rows = await res.json();
+    const ips = rows.filter(r => r.type === "ip");
+    const media = rows.filter(r => r.type === "media");
+
+    document.getElementById("ipEmpty").style.display = ips.length ? "none" : "block";
+    document.getElementById("ipList").innerHTML = ips.map(r => `<div class="list-item"><span>${r.value}</span><button data-id="${r.id}">Hapus</button></div>`).join("");
+
+    document.getElementById("mediaEmpty").style.display = media.length ? "none" : "block";
+    document.getElementById("mediaList").innerHTML = media.map(r => `<div class="list-item"><span>${r.value}</span><button data-id="${r.id}">Hapus</button></div>`).join("");
+
+    document.querySelectorAll("button[data-id]").forEach(b => b.addEventListener("click", async () => {
+      await fetch(`/api/dashboard/blocked/${b.dataset.id}`, { method: "DELETE" });
+      load();
+    }));
+  }
+  document.getElementById("ipForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = document.getElementById("ipInput");
+    if (!input.value.trim()) return;
+    await fetch("/api/dashboard/blocked", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "ip", value: input.value }) });
+    input.value = ""; load();
+  });
+  document.getElementById("mediaForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = document.getElementById("mediaInput");
+    if (!input.value.trim()) return;
+    await fetch("/api/dashboard/blocked", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "media", value: input.value }) });
+    input.value = ""; load();
+  });
+  document.addEventListener("DOMContentLoaded", load);
+</script>
+</body>
+</html>

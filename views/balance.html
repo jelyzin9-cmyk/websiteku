@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balance — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Balance</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Saldo Tersedia</h2>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="num" id="availBalance">…</div><div class="lbl">Bisa ditarik sekarang</div></div>
+        </div>
+        <p class="desc" id="irisWarning" style="display:none;margin-top:14px;color:var(--red);">
+          ⚠️ Fitur penarikan belum aktif di server ini — IRIS_API_KEY belum diisi di <code>.env</code>. Rekening tujuan tetap bisa disimpan, tapi permintaan penarikan akan gagal sampai key-nya dipasang.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Rekening / E-Wallet Tujuan</h2>
+        <p class="desc">Simpan tujuan pencairan dana sebelum melakukan penarikan.</p>
+        <form id="accForm">
+          <label for="accType">Jenis</label>
+          <select id="accType">
+            <option value="bank">Bank</option>
+            <option value="ewallet">E-Wallet</option>
+          </select>
+          <label for="bankCode">Kode Bank / E-Wallet</label>
+          <input type="text" id="bankCode" placeholder="mis. bca, bni, gopay, dana">
+          <label for="accountNumber">Nomor Rekening / HP</label>
+          <input type="text" id="accountNumber">
+          <label for="accountName">Nama Pemilik</label>
+          <input type="text" id="accountName">
+          <button class="btn" type="submit" style="margin-top:14px;">Simpan Rekening</button>
+        </form>
+        <div id="accList" style="margin-top:16px;"></div>
+        <div class="empty" id="accEmpty" style="display:none;">Belum ada rekening tersimpan.</div>
+      </div>
+
+      <div class="card">
+        <h2>Tarik Saldo</h2>
+        <form id="withdrawForm">
+          <label for="withdrawAccount">Kirim ke</label>
+          <select id="withdrawAccount"></select>
+          <label for="withdrawAmount">Jumlah (Rp)</label>
+          <input type="number" id="withdrawAmount" min="50000" step="1000">
+          <button class="btn" type="submit" style="margin-top:14px;">Ajukan Penarikan</button>
+          <div class="msg" id="withdrawMsg"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Riwayat Penarikan</h2>
+        <table id="wdTable">
+          <thead><tr><th>Tujuan</th><th>Jumlah</th><th>Status</th><th>Waktu</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="empty" id="wdEmpty" style="display:none;">Belum ada penarikan.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  const fmt = v => "Rp " + v.toLocaleString("id-ID");
+  const statusLabel = { pending: "Menunggu", processing: "Diproses", completed: "Selesai", failed: "Gagal" };
+
+  async function loadBalance() {
+    const res = await fetch("/api/dashboard/balance");
+    const data = await res.json();
+    document.getElementById("availBalance").textContent = fmt(data.available);
+  }
+
+  async function loadAccounts() {
+    const res = await fetch("/api/dashboard/payout-accounts");
+    const rows = await res.json();
+    document.getElementById("accEmpty").style.display = rows.length ? "none" : "block";
+    document.getElementById("accList").innerHTML = rows.map(r => `
+      <div class="list-item"><span>${r.type === "bank" ? "🏦" : "📱"} ${r.bank_code.toUpperCase()} — ${r.account_number} (${r.account_name})</span>
+      <button data-id="${r.id}">Hapus</button></div>
+    `).join("");
+    document.querySelectorAll("#accList button").forEach(b => b.addEventListener("click", async () => {
+      await fetch(`/api/dashboard/payout-accounts/${b.dataset.id}`, { method: "DELETE" });
+      loadAccounts(); loadWithdrawSelect();
+    }));
+
+    const select = document.getElementById("withdrawAccount");
+    select.innerHTML = rows.length
+      ? rows.map(r => `<option value="${r.id}">${r.bank_code.toUpperCase()} — ${r.account_number}</option>`).join("")
+      : `<option value="">Belum ada rekening, tambahkan dulu di atas</option>`;
+  }
+  const loadWithdrawSelect = loadAccounts;
+
+  async function loadWithdrawals() {
+    const res = await fetch("/api/dashboard/withdrawals");
+    const rows = await res.json();
+    document.getElementById("wdEmpty").style.display = rows.length ? "none" : "block";
+    document.querySelector("#wdTable tbody").innerHTML = rows.map(r => `
+      <tr><td>${r.bank_code.toUpperCase()} — ${r.account_number}</td><td>${fmt(r.amount)}</td>
+      <td><span class="tag ${r.status === 'completed' ? 'paid' : r.status === 'failed' ? 'failed' : 'pending'}">${statusLabel[r.status]}</span></td>
+      <td>${new Date(r.created_at).toLocaleString("id-ID")}</td></tr>
+    `).join("");
+  }
+
+  document.getElementById("accForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await fetch("/api/dashboard/payout-accounts", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: document.getElementById("accType").value,
+        bankCode: document.getElementById("bankCode").value.toLowerCase(),
+        accountNumber: document.getElementById("accountNumber").value,
+        accountName: document.getElementById("accountName").value,
+      }),
+    });
+    e.target.reset();
+    loadAccounts();
+  });
+
+  document.getElementById("withdrawForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById("withdrawMsg"); msg.textContent = ""; msg.className = "msg";
+    try {
+      const res = await fetch("/api/dashboard/withdraw", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          payoutAccountId: document.getElementById("withdrawAccount").value,
+          amount: document.getElementById("withdrawAmount").value,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      msg.textContent = data.note || "Penarikan diajukan."; msg.classList.add("ok");
+      loadBalance(); loadWithdrawals();
+      e.target.reset();
+    } catch (err) {
+      msg.textContent = err.message; msg.classList.add("err");
+      if (err.message.includes("IRIS_API_KEY")) document.getElementById("irisWarning").style.display = "block";
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadBalance(); loadAccounts(); loadWithdrawals();
+  });
+</script>
+</body>
+</html>

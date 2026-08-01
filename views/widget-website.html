@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Widget Website — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Widget Website</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Link Halaman Dukungan</h2>
+        <p class="desc">Bagikan link ini ke fansmu (di bio Instagram, deskripsi YouTube, dll).</p>
+        <div class="copy-row">
+          <input type="text" id="donationLink" readonly>
+          <button class="btn secondary" onclick="copyField('donationLink')">Salin</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>URL Overlay untuk OBS</h2>
+        <p class="desc">Tambahkan sebagai <b>Browser Source</b> di OBS/Streamlabs supaya alert dukungan muncul otomatis saat live.</p>
+        <div class="copy-row">
+          <input type="text" id="overlayLink" readonly>
+          <button class="btn secondary" onclick="copyField('overlayLink')">Salin</button>
+        </div>
+        <p class="desc" style="margin-top:14px;">Ukuran disarankan: lebar 500px, tinggi 300px. Centang "Shutdown source when not visible" agar tidak menghabiskan resource.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  function copyField(id) {
+    const el = document.getElementById(id);
+    el.select(); document.execCommand("copy");
+  }
+  async function load() {
+    const res = await fetch("/api/dashboard/widget-info");
+    const data = await res.json();
+    document.getElementById("donationLink").value = window.location.origin + data.donationPageUrl;
+    document.getElementById("overlayLink").value = window.location.origin + data.overlayUrl;
+  }
+  document.addEventListener("DOMContentLoaded", load);
+</script>
+</body>
+</html>

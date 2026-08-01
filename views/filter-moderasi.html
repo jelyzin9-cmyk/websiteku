@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filter Kata — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Filter Kata</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Kata yang Diblokir</h2>
+        <p class="desc">Kata-kata ini akan otomatis disensor jadi *** di pesan dukungan yang masuk.</p>
+        <form id="addForm" style="display:flex;gap:8px;">
+          <input type="text" id="wordInput" placeholder="Tambah kata..." style="flex:1;">
+          <button class="btn" type="submit">Tambah</button>
+        </form>
+        <div id="list" style="margin-top:16px;"></div>
+        <div class="empty" id="empty" style="display:none;">Belum ada kata yang difilter.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  async function load() {
+    const res = await fetch("/api/dashboard/filter-words");
+    const rows = await res.json();
+    document.getElementById("empty").style.display = rows.length ? "none" : "block";
+    document.getElementById("list").innerHTML = rows.map(r => `
+      <div class="list-item"><span>${r.word}</span><button data-id="${r.id}">Hapus</button></div>
+    `).join("");
+    document.querySelectorAll("#list button").forEach(b => b.addEventListener("click", async () => {
+      await fetch(`/api/dashboard/filter-words/${b.dataset.id}`, { method: "DELETE" });
+      load();
+    }));
+  }
+  document.getElementById("addForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = document.getElementById("wordInput");
+    if (!input.value.trim()) return;
+    await fetch("/api/dashboard/filter-words", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ word: input.value }),
+    });
+    input.value = "";
+    load();
+  });
+  document.addEventListener("DOMContentLoaded", load);
+</script>
+</body>
+</html>

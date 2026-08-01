@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Halaman — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Edit Halaman</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Profil Halaman Dukungan</h2>
+        <p class="desc">Ini yang tampil di halaman publik tempat fansmu mengirim dukungan.</p>
+        <form id="profileForm">
+          <label for="displayName">Nama Tampilan</label>
+          <input type="text" id="displayName" required>
+          <label for="bio">Bio Singkat</label>
+          <textarea id="bio" placeholder="Ceritakan tentang kontenmu"></textarea>
+          <label for="avatarLetter">Huruf Avatar</label>
+          <input type="text" id="avatarLetter" maxlength="1" style="width:80px;">
+          <label for="minAmount">Minimal Jumlah Dukungan (Rp)</label>
+          <input type="number" id="minAmount" min="1000" step="1000">
+          <button class="btn" type="submit">Simpan Perubahan</button>
+          <div class="msg" id="msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  async function loadProfile() {
+    const res = await fetch("/api/auth/me");
+    const user = await res.json();
+    document.getElementById("displayName").value = user.display_name;
+    document.getElementById("bio").value = user.bio || "";
+    document.getElementById("avatarLetter").value = user.avatar_letter;
+    document.getElementById("minAmount").value = user.min_amount;
+  }
+  document.getElementById("profileForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById("msg"); msg.textContent = ""; msg.className = "msg";
+    try {
+      const res = await fetch("/api/dashboard/profile", {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          displayName: document.getElementById("displayName").value,
+          bio: document.getElementById("bio").value,
+          avatarLetter: document.getElementById("avatarLetter").value,
+          minAmount: document.getElementById("minAmount").value,
+        }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+      msg.textContent = "Tersimpan."; msg.classList.add("ok");
+    } catch (err) { msg.textContent = err.message; msg.classList.add("err"); }
+  });
+  document.addEventListener("DOMContentLoaded", loadProfile);
+</script>
+</body>
+</html>

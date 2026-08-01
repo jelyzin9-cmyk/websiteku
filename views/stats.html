@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Statistik</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Dukungan per Hari (30 hari terakhir)</h2>
+        <table id="dayTable">
+          <thead><tr><th>Tanggal</th><th>Jumlah Transaksi</th><th>Total</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="empty" id="dayEmpty" style="display:none;">Belum ada data.</div>
+      </div>
+      <div class="card">
+        <h2>Top Pendukung</h2>
+        <table id="donorTable">
+          <thead><tr><th>Nama</th><th>Total Dukungan</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="empty" id="donorEmpty" style="display:none;">Belum ada data.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  const fmt = v => "Rp " + v.toLocaleString("id-ID");
+  async function load() {
+    const res = await fetch("/api/dashboard/stats");
+    const data = await res.json();
+    const dayBody = document.querySelector("#dayTable tbody");
+    document.getElementById("dayEmpty").style.display = data.byDay.length ? "none" : "block";
+    dayBody.innerHTML = data.byDay.map(d => `<tr><td>${d.day}</td><td>${d.count}</td><td>${fmt(d.total)}</td></tr>`).join("");
+
+    const donorBody = document.querySelector("#donorTable tbody");
+    document.getElementById("donorEmpty").style.display = data.topDonors.length ? "none" : "block";
+    donorBody.innerHTML = data.topDonors.map(d => `<tr><td>${d.donor_name}</td><td>${fmt(d.total)}</td></tr>`).join("");
+  }
+  document.addEventListener("DOMContentLoaded", load);
+</script>
+</body>
+</html>
