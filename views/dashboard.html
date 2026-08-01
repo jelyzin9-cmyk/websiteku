@@ -1,67 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Traktir</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/dashboard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin</title>
+  <style>
+    body { background: #0d0f12; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .box { background: #161b22; border: 1px solid #30363d; padding: 32px; border-radius: 12px; text-align: center; }
+    a { color: #f59e0b; text-decoration: none; font-weight: bold; }
+  </style>
 </head>
 <body>
-<div class="shell">
-  <div id="sidebar"></div>
-  <div>
-    <div id="topbar">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <h1>Dashboard</h1>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <span class="userchip" id="userchip"></span>
-        <button class="logout-btn" id="logoutBtn">Keluar</button>
-      </div>
-    </div>
-    <div class="content">
-      <div class="card">
-        <h2>Ringkasan</h2>
-        <div class="stat-grid" id="statGrid">
-          <div class="stat-box"><div class="num">…</div><div class="lbl">Total Balance</div></div>
-          <div class="stat-box"><div class="num">…</div><div class="lbl">Pendukung Unik</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Dukungan Terbaru</h2>
-        <table id="recentTable">
-          <thead><tr><th>Nama</th><th>Jumlah</th><th>Pesan</th><th>Waktu</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <div class="empty" id="recentEmpty" style="display:none;">Belum ada dukungan masuk.</div>
-      </div>
-    </div>
+  <div class="box">
+    <h1>Selamat Datang di Dashboard! 🎉</h1>
+    <p>Kamu berhasil masuk secara resmi dengan session aktif.</p>
+    <br>
+    <a href="/logout">Logout / Keluar</a>
   </div>
-</div>
-<script src="/assets/dashboard.js"></script>
-<script>
-  const fmt = v => "Rp " + v.toLocaleString("id-ID");
-  async function load() {
-    const res = await fetch("/api/dashboard/summary");
-    if (!res.ok) return;
-    const data = await res.json();
-    document.getElementById("statGrid").innerHTML = `
-      <div class="stat-box"><div class="num">${fmt(data.balance)}</div><div class="lbl">Total Balance</div></div>
-      <div class="stat-box"><div class="num">${data.supporterCount}</div><div class="lbl">Pendukung Unik</div></div>
-    `;
-    const tbody = document.querySelector("#recentTable tbody");
-    if (!data.recent.length) {
-      document.getElementById("recentEmpty").style.display = "block";
-    } else {
-      tbody.innerHTML = data.recent.map(d => `
-        <tr><td>${d.donor_name}</td><td>${fmt(d.amount)}</td><td>${d.message || "-"}</td>
-        <td>${new Date(d.created_at).toLocaleString("id-ID")}</td></tr>
-      `).join("");
-    }
-  }
-  document.addEventListener("DOMContentLoaded", load);
-</script>
 </body>
 </html>
