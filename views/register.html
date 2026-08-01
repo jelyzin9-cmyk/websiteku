@@ -1,61 +1,85 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daftar — Traktir</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/dashboard.css">
-<style>
-  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px 0;}
-  .authcard{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;}
-  .authcard h1{font-size:19px;margin:0 0 4px;}
-  .authcard p{color:var(--muted);font-size:13px;margin:0 0 20px;}
-  .authcard .btn{width:100%;margin-top:18px;}
-  .switch-link{text-align:center;margin-top:16px;font-size:13px;color:var(--muted);}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buat Halaman Dukungan</title>
+  <link rel="stylesheet" href="/dashboard.css">
 </head>
-<body>
-<div class="authcard">
-  <h1>Buat Halaman Dukungan</h1>
-  <p>Gratis, siap terima donasi dalam beberapa menit</p>
-  <form id="regForm">
-    <label for="displayName">Nama Tampilan</label>
-    <input type="text" id="displayName" placeholder="Bintang Kartika" required>
-    <label for="username">Username (untuk link halamanmu)</label>
-    <input type="text" id="username" placeholder="bintang" required pattern="[a-z0-9_]{3,20}">
-    <label for="email">Email</label>
-    <input type="email" id="email" required>
-    <label for="password">Password</label>
-    <input type="password" id="password" minlength="8" required>
-    <button class="btn" type="submit">Daftar</button>
-    <div class="msg" id="msg"></div>
-  </form>
-  <div class="switch-link">Sudah punya akun? <a href="/login" style="color:var(--gold);">Masuk</a></div>
-</div>
-<script>
-  document.getElementById("regForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById("msg");
-    msg.textContent = ""; msg.className = "msg";
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          displayName: document.getElementById("displayName").value,
-          username: document.getElementById("username").value.toLowerCase(),
-          email: document.getElementById("email").value,
-          password: document.getElementById("password").value,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      window.location.href = "/dashboard";
-    } catch (err) {
-      msg.textContent = err.message || "Gagal daftar";
-      msg.classList.add("err");
-    }
-  });
-</script>
+<body class="bg-dark text-white">
+
+  <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card bg-gray-900 border-gray-800 p-4 style-card" style="max-width: 400px; width: 100%;">
+      
+      <h2 class="h4 font-weight-bold mb-1">Buat Halaman Dukungan</h2>
+      <p class="text-muted small mb-4">Gratis, siap terima donasi dalam beberapa menit</p>
+
+      <form action="/auth/register" method="POST">
+        
+        <!-- Nama Tampilan -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Nama Tampilan</label>
+          <input 
+            type="text" 
+            name="name" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="Jelyzx" 
+            required
+          >
+        </div>
+
+        <!-- Username -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Username (untuk link halamanmu)</label>
+          <input 
+            type="text" 
+            name="username" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="jelyzx" 
+            pattern="[a-zA-Z0-9_-]+"
+            title="Gunakan huruf, angka, atau tanda strip saja tanpa spasi" 
+            required
+          >
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Email</label>
+          <input 
+            type="email" 
+            name="email" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="nama@email.com" 
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mb-4">
+          <label class="form-label small text-muted">Password</label>
+          <input 
+            type="password" 
+            name="password" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="••••••••" 
+            minlength="6"
+            required
+          >
+        </div>
+
+        <!-- Tombol Daftar -->
+        <button type="submit" class="btn btn-warning w-100 font-weight-bold py-2 mb-3">
+          Daftar
+        </button>
+
+      </form>
+
+      <div class="text-center small text-muted">
+        Sudah punya akun? <a href="/login" class="text-warning">Masuk</a>
+      </div>
+
+    </div>
+  </div>
+
 </body>
 </html>
