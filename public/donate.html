@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traktir Bintang — Kirim Dukungan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0E10;
+    --panel:#18181B;
+    --field:#1F1F23;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.22);
+    --text:#F4F4F5;
+    --muted:#9A9AA3;
+    --gold:#F2B84B;
+    --gold-dark:#C98F2A;
+    --red:#F0655A;
+    --green:#6FCF97;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:520px;margin:0 auto;padding:0 20px 60px;}
+
+  /* Profile header */
+  .profile{display:flex; align-items:center; gap:14px; padding:32px 0 20px;}
+  .avatar{width:56px;height:56px;border-radius:50%;
+    background:linear-gradient(145deg,var(--gold),var(--gold-dark));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800; font-size:22px; color:#1A1200; flex-shrink:0;}
+  .profile h1{font-size:18px; margin:0; font-weight:700;}
+  .profile p{margin:2px 0 0; color:var(--muted); font-size:13px;}
+
+  /* Shared card */
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px; margin-top:16px;}
+  .card h2{font-size:15px; margin:0 0 16px; font-weight:700;}
+
+  label{display:block; font-size:13px; color:var(--text); margin:16px 0 7px; font-weight:600;}
+  label:first-of-type{margin-top:0;}
+  label .req{color:var(--red); margin-left:2px;}
+  label .count{float:right; color:var(--muted); font-weight:500; font-size:12px;}
+
+  input[type=text], input[type=email]{width:100%; background:var(--field); border:1px solid var(--line);
+    border-radius:12px; padding:13px 14px; color:var(--text); font-family:inherit; font-size:14.5px;}
+  input::placeholder, textarea::placeholder{color:#6A6A72;}
+  input:focus, textarea:focus, .pill:focus-visible, .quick-btn:focus-visible, .cta:focus-visible{
+    outline:2px solid var(--gold); outline-offset:1px;}
+  textarea{width:100%; background:var(--field); border:1px solid var(--line); border-radius:12px;
+    padding:13px 14px; color:var(--text); font-family:inherit; font-size:14.5px; resize:vertical; min-height:90px;}
+
+  .amount-field{position:relative;}
+  .amount-field .coin{position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    width:20px; height:20px; border-radius:50%; background:linear-gradient(145deg,var(--gold),var(--gold-dark));
+    font-size:10px; font-weight:800; color:#1A1200; display:flex; align-items:center; justify-content:center;}
+  .amount-field input{padding-left:42px; font-family:'JetBrains Mono',monospace; font-weight:600;}
+
+  .hint-row{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:8px; font-size:12px; color:var(--muted);}
+  .hint-row b{color:var(--gold); font-weight:700;}
+
+  .quick-row{display:flex; gap:8px; margin-top:12px; overflow-x:auto; padding-bottom:4px;}
+  .quick-btn{flex:0 0 auto; background:var(--field); border:1px solid var(--line); border-radius:10px;
+    color:var(--text); font-family:'JetBrains Mono',monospace; font-size:13px; padding:10px 16px;
+    cursor:pointer; white-space:nowrap; transition:.15s;}
+  .quick-btn:hover{border-color:var(--gold);}
+  .quick-btn.active{background:var(--gold); color:#1A1200; border-color:var(--gold); font-weight:700;}
+
+  /* Payment method tabs */
+  .tabs{display:flex; background:var(--field); border:1px solid var(--line); border-radius:12px; padding:4px; gap:4px;}
+  .tab{flex:1; text-align:center; padding:10px 4px; border-radius:9px; font-size:13.5px; font-weight:700;
+    color:var(--muted); cursor:pointer; transition:.15s;}
+  .tab.active{background:#2A2A30; color:var(--text); border:1px solid var(--line-strong);}
+
+  .method-note{font-size:12.5px; color:var(--muted); margin-top:12px; line-height:1.6;}
+  .method-note b{color:var(--gold);}
+
+  .pill-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;}
+  .pill{background:var(--field); border:1px solid var(--line); border-radius:12px; padding:14px 8px;
+    text-align:center; cursor:pointer; transition:.15s;}
+  .pill:hover{border-color:var(--line-strong);}
+  .pill.active{border-color:var(--gold); background:rgba(242,184,75,0.08);}
+  .pill .badge{display:inline-flex; align-items:center; justify-content:center; height:26px; padding:0 10px;
+    border-radius:6px; font-weight:800; font-size:12.5px; letter-spacing:.02em; margin-bottom:6px;}
+  .pill .label{display:block; font-size:11.5px; color:var(--muted); font-weight:600;}
+
+  /* Summary */
+  .summary-row{display:flex; justify-content:space-between; align-items:center; padding:10px 0; font-size:14px;}
+  .summary-row + .summary-row{border-top:1px solid var(--line);}
+  .summary-row.total{font-weight:800; font-size:15px;}
+  .summary-row .amt{font-family:'JetBrains Mono',monospace; display:inline-flex; align-items:center; gap:6px;}
+  .summary-row .amt .coin-sm{width:16px;height:16px;border-radius:50%;
+    background:linear-gradient(145deg,var(--gold),var(--gold-dark)); display:inline-block;}
+  .summary-row .val-muted{color:var(--muted); font-weight:600;}
+
+  .agree{display:flex; gap:10px; align-items:flex-start; margin-top:18px;}
+  .agree input{width:18px; height:18px; margin-top:2px; accent-color:var(--gold); flex-shrink:0;}
+  .agree p{font-size:12.5px; color:var(--muted); line-height:1.6; margin:0;}
+  .agree a{color:var(--red);}
+
+  .cta{width:100%; margin-top:18px; background:var(--gold); border:none; border-radius:12px; padding:15px;
+    font-size:15px; font-weight:800; color:#1A1200; font-family:inherit; cursor:pointer; transition:.15s;
+    box-shadow:0 4px 0 var(--gold-dark);}
+  .cta:active{transform:translateY(2px); box-shadow:0 2px 0 var(--gold-dark);}
+  .cta:disabled{opacity:.5; cursor:not-allowed; box-shadow:none; transform:none;}
+
+  .status{margin-top:12px; font-size:13px; text-align:center; min-height:18px;}
+  .status.err{color:var(--red);}
+  .status.ok{color:var(--green);}
+
+  footer{text-align:center; color:var(--muted); font-size:11.5px; margin-top:24px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="profile">
+    <div class="avatar" id="avatarLetter">…</div>
+    <div>
+      <h1 id="creatorName">Memuat…</h1>
+      <p id="creatorBio">Kirim dukungan lewat QRIS, e-wallet, atau transfer bank</p>
+    </div>
+  </div>
+
+  <form id="donateForm">
+    <div class="card">
+      <h2>Data Pendukung</h2>
+
+      <label for="name">Nama<span class="req">*</span></label>
+      <input type="text" id="name" placeholder="Seseorang" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Masukkan email (opsional)">
+
+      <label for="amount">Jumlah Dukungan<span class="req">*</span></label>
+      <div class="amount-field">
+        <span class="coin">Rp</span>
+        <input type="text" inputmode="numeric" id="amount" value="5.000" required>
+      </div>
+      <div class="hint-row">
+        <span>Minimal alert: <b>1.000</b></span>
+        <span>Pesan: <b>0</b></span>
+        <span>Text-to-speech: <b>3.000</b></span>
+      </div>
+      <div class="quick-row" id="quickRow">
+        <button type="button" class="quick-btn" data-v="1000">1rb</button>
+        <button type="button" class="quick-btn" data-v="10000">10rb</button>
+        <button type="button" class="quick-btn active" data-v="25000">25rb</button>
+        <button type="button" class="quick-btn" data-v="50000">50rb</button>
+        <button type="button" class="quick-btn" data-v="100000">100rb</button>
+      </div>
+
+      <label for="message">Isi Pesan <span class="count" id="msgCount">0/255</span></label>
+      <textarea id="message" maxlength="255" placeholder="Tulis pesan di sini"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Metode Pembayaran</h2>
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-t="qris">QRIS</div>
+        <div class="tab" data-t="bank">Bank</div>
+        <div class="tab" data-t="ewallet">E-Wallet</div>
+      </div>
+
+      <div id="panel-qris">
+        <p class="method-note">Scan kode QRIS dengan aplikasi bank atau e-wallet apa pun setelah menekan tombol kirim di bawah.</p>
+      </div>
+
+      <div id="panel-bank" style="display:none;">
+        <p class="method-note">Minimal total transaksi via bank transfer adalah <b>Rp 250.000</b></p>
+        <div class="pill-grid" id="bankGrid">
+          <div class="pill" data-sub="bca_va"><span class="badge" style="background:#0057A3;color:#fff;">BCA</span><span class="label">BCA</span></div>
+          <div class="pill" data-sub="bni_va"><span class="badge" style="background:#F47216;color:#fff;">BNI</span><span class="label">BNI</span></div>
+          <div class="pill" data-sub="bri_va"><span class="badge" style="background:#00529C;color:#fff;">BRI</span><span class="label">BRI</span></div>
+          <div class="pill" data-sub="mandiri_va"><span class="badge" style="background:#003D79;color:#fff;">Mandiri</span><span class="label">Mandiri</span></div>
+          <div class="pill" data-sub="permata_va"><span class="badge" style="background:#8CC63F;color:#1A1200;">Permata</span><span class="label">Permata</span></div>
+          <div class="pill" data-sub="cimb_va"><span class="badge" style="background:#7A1E1E;color:#fff;">CIMB</span><span class="label">CIMB Niaga</span></div>
+        </div>
+      </div>
+
+      <div id="panel-ewallet" style="display:none;">
+        <div class="pill-grid" id="walletGrid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="pill" data-sub="gopay"><span class="badge" style="background:#00AA13;color:#fff;">GoPay</span><span class="label">GoPay</span></div>
+          <div class="pill" data-sub="ovo"><span class="badge" style="background:#4C3494;color:#fff;">OVO</span><span class="label">OVO</span></div>
+          <div class="pill" data-sub="dana"><span class="badge" style="background:#118EEA;color:#fff;">DANA</span><span class="label">DANA</span></div>
+          <div class="pill" data-sub="shopeepay"><span class="badge" style="background:#EE4D2D;color:#fff;">ShopeePay</span><span class="label">ShopeePay</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="summary-row">
+        <span>Total dukungan dikirim</span>
+        <span class="amt"><span class="coin-sm"></span><span id="sumAmount">5.000</span></span>
+      </div>
+      <div class="summary-row">
+        <span>Metode Pembayaran</span>
+        <span class="val-muted" id="sumMethod">QRIS</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total Pembayaran</span>
+        <span class="amt"><span class="coin-sm"></span><span id="sumTotal">5.000</span></span>
+      </div>
+
+      <div class="agree">
+        <input type="checkbox" id="agree" required>
+        <p>Saya menyetujui dan memahami bahwa transaksi ini dilakukan secara sadar dan sukarela sebagai bentuk dukungan yang tidak dapat dikembalikan, sesuai dengan <a href="#">syarat dan ketentuan</a>.</p>
+      </div>
+
+      <button type="submit" class="cta" id="payBtn">Kirim Dukungan</button>
+      <div class="status" id="statusMsg"></div>
+    </div>
+  </form>
+
+  <footer>Pembayaran diproses oleh mitra payment gateway (Midtrans). Halaman ini tidak menyimpan data kartu atau rekeningmu.</footer>
+</div>
+
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="MIDTRANS_CLIENT_KEY_DISINI"></script>
+<script>
+  const fmt = v => v.toLocaleString("id-ID");
+  const parseNum = s => parseInt(String(s).replace(/\D/g,""),10) || 0;
+
+  // --- Ambil username dari URL (/d/:username) dan muat profil kreator ---
+  const username = window.location.pathname.split("/").filter(Boolean)[1];
+  (async function loadCreator() {
+    try {
+      const res = await fetch(`/api/creator/${username}`);
+      if (!res.ok) {
+        document.getElementById("creatorName").textContent = "Halaman tidak ditemukan";
+        document.querySelector("form").style.display = "none";
+        return;
+      }
+      const c = await res.json();
+      document.getElementById("creatorName").textContent = c.display_name;
+      document.getElementById("creatorBio").textContent = c.bio || "Kirim dukungan lewat QRIS, e-wallet, atau transfer bank";
+      document.getElementById("avatarLetter").textContent = c.avatar_letter;
+      document.title = `Traktir ${c.display_name} — Kirim Dukungan`;
+    } catch {
+      document.getElementById("creatorName").textContent = "Gagal memuat halaman";
+    }
+  })();
+
+  // --- Amount field ---
+  const amountInput = document.getElementById("amount");
+  const quickBtns = document.querySelectorAll(".quick-btn");
+  let amount = 5000;
+
+  function setAmount(v){
+    amount = v;
+    amountInput.value = fmt(v);
+    document.getElementById("sumAmount").textContent = fmt(v);
+    document.getElementById("sumTotal").textContent = fmt(v);
+  }
+  quickBtns.forEach(b => b.addEventListener("click", () => {
+    quickBtns.forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    setAmount(parseInt(b.dataset.v,10));
+  }));
+  amountInput.addEventListener("input", () => {
+    quickBtns.forEach(x => x.classList.remove("active"));
+    setAmount(parseNum(amountInput.value));
+  });
+  amountInput.addEventListener("blur", () => { amountInput.value = fmt(amount); });
+
+  // --- Message counter ---
+  const message = document.getElementById("message");
+  const msgCount = document.getElementById("msgCount");
+  message.addEventListener("input", () => { msgCount.textContent = `${message.value.length}/255`; });
+
+  // --- Payment tabs ---
+  const tabs = document.querySelectorAll(".tab");
+  const panels = { qris: document.getElementById("panel-qris"), bank: document.getElementById("panel-bank"), ewallet: document.getElementById("panel-ewallet") };
+  const methodLabels = { qris: "QRIS", bank: "Transfer Bank", ewallet: "E-Wallet" };
+  let selectedMethod = "qris";
+  let selectedSub = null;
+
+  function showPanel(t){
+    Object.entries(panels).forEach(([k,el]) => el.style.display = k === t ? "block" : "none");
+    tabs.forEach(x => x.classList.toggle("active", x.dataset.t === t));
+    selectedMethod = t;
+    selectedSub = null;
+    document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+    document.getElementById("sumMethod").textContent = methodLabels[t];
+  }
+  tabs.forEach(t => t.addEventListener("click", () => showPanel(t.dataset.t)));
+
+  document.querySelectorAll(".pill").forEach(p => p.addEventListener("click", () => {
+    document.querySelectorAll(".pill").forEach(x => x.classList.remove("active"));
+    p.classList.add("active");
+    selectedSub = p.dataset.sub;
+    document.getElementById("sumMethod").textContent = p.querySelector(".label").textContent;
+  }));
+
+  // --- Submit ---
+  const form = document.getElementById("donateForm");
+  const statusMsg = document.getElementById("statusMsg");
+  const payBtn = document.getElementById("payBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusMsg.textContent = "";
+    statusMsg.className = "status";
+
+    if (!document.getElementById("name").value.trim()) {
+      statusMsg.textContent = "Nama wajib diisi.";
+      statusMsg.classList.add("err");
+      return;
+    }
+    if (amount < 1000) {
+      statusMsg.textContent = "Minimal dukungan Rp 1.000.";
+      statusMsg.classList.add("err");
+      return;
+    }
+    if (selectedMethod === "bank" && amount < 250000) {
+      statusMsg.textContent = "Minimal transfer bank Rp 250.000.";
+      statusMsg.classList.add("err");
+      return;
+    }
+    if (!document.getElementById("agree").checked) {
+      statusMsg.textContent = "Centang persetujuan syarat & ketentuan dulu ya.";
+      statusMsg.classList.add("err");
+      return;
+    }
+
+    payBtn.disabled = true;
+    payBtn.textContent = "Menyiapkan pembayaran...";
+
+    const payload = {
+      username,
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      message: message.value.trim(),
+      amount,
+      method: selectedMethod,
+      submethod: selectedSub,
+    };
+
+    try {
+      const res = await fetch("/api/create-transaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Gagal membuat transaksi");
+      const data = await res.json();
+
+      window.snap.pay(data.token, {
+        onSuccess: () => { statusMsg.textContent = "Dukungan berhasil dikirim, makasih! 🎉"; statusMsg.classList.add("ok"); form.reset(); setAmount(5000); },
+        onPending: () => { statusMsg.textContent = "Pembayaran diproses, tunggu konfirmasi ya."; },
+        onError: () => { statusMsg.textContent = "Pembayaran gagal. Coba lagi."; statusMsg.classList.add("err"); },
+        onClose: () => { statusMsg.textContent = "Kamu menutup jendela pembayaran."; }
+      });
+    } catch (err) {
+      statusMsg.textContent = "Ada masalah di server. Coba lagi sebentar.";
+      statusMsg.classList.add("err");
+    } finally {
+      payBtn.disabled = false;
+      payBtn.textContent = "Kirim Dukungan";
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Overlay Dukungan</title>
+<style>
+  html,body{margin:0;background:transparent;overflow:hidden;font-family:'Manrope',sans-serif;}
+  #stage{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(140%);
+    transition:transform .4s cubic-bezier(.2,.8,.2,1);}
+  #stage.show{transform:translateX(-50%) translateY(0);}
+  .alert-card{background:#18181B;border:2px solid #F2B84B;border-radius:16px;padding:18px 26px;
+    color:#F4F4F5;min-width:320px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.5);}
+  .alert-card .name{font-size:19px;font-weight:800;color:#F2B84B;}
+  .alert-card .amount{font-family:'JetBrains Mono',monospace;font-size:15px;margin-top:4px;color:#F4F4F5;}
+  .alert-card .msg{font-size:13.5px;margin-top:8px;color:#D6D6DA;}
+  #mediaBox{position:fixed;top:20px;right:20px;width:400px;display:none;}
+  #mediaBox iframe{width:100%;height:225px;border:0;border-radius:12px;}
+</style>
+</head>
+<body>
+<div id="stage"><div class="alert-card">
+  <div class="name" id="aName"></div>
+  <div class="amount" id="aAmount"></div>
+  <div class="msg" id="aMsg"></div>
+</div></div>
+<div id="mediaBox"><iframe id="mediaFrame" allow="autoplay"></iframe></div>
+
+<script>
+  const token = window.location.pathname.split("/").pop();
+  const stage = document.getElementById("stage");
+  const queue = [];
+  let playing = false;
+
+  function fmt(v){ return "Rp " + v.toLocaleString("id-ID"); }
+
+  function showAlert(evt) {
+    document.getElementById("aName").textContent = evt.name;
+    document.getElementById("aAmount").textContent = fmt(evt.amount);
+    document.getElementById("aMsg").textContent = evt.message || "";
+    stage.classList.add("show");
+
+    if (evt.tts && evt.message && "speechSynthesis" in window) {
+      const utter = new SpeechSynthesisUtterance(`${evt.name} mengirim dukungan ${evt.amount} rupiah. ${evt.message}`);
+      utter.lang = "id-ID";
+      window.speechSynthesis.speak(utter);
+    }
+
+    setTimeout(() => {
+      stage.classList.remove("show");
+      setTimeout(playNext, 500);
+    }, (evt.duration || 6) * 1000);
+  }
+
+  function playNext() {
+    if (!queue.length) { playing = false; return; }
+    playing = true;
+    showAlert(queue.shift());
+  }
+
+  function enqueue(evt) {
+    queue.push(evt);
+    if (!playing) playNext();
+  }
+
+  // --- Koneksi real-time ke server ---
+  const source = new EventSource(`/api/overlay-stream/${token}`);
+  source.onmessage = (e) => {
+    try { enqueue(JSON.parse(e.data)); } catch {}
+  };
+  source.onerror = () => {
+    // EventSource akan otomatis reconnect sendiri (lihat "retry:" di server)
+  };
+</script>
+</body>
+</html>
