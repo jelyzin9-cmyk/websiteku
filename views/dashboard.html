@@ -3,143 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Support - WebsiteKu</title>
+  <title>Dashboard - BagiBagi</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0d0f12; color: #c9d1d9; display: flex; min-height: 100vh; }
-    .wrapper { display: flex; width: 100%; }
-    .sidebar { width: 240px; background: #161b22; border-right: 1px solid #30363d; padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; }
-    .brand { font-size: 20px; font-weight: 800; color: #f59e0b; margin-bottom: 32px; }
-    .menu { list-style: none; }
-    .menu li { margin-bottom: 8px; }
-    .menu a { display: block; padding: 10px 14px; color: #8b949e; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500; }
-    .menu a.active, .menu a:hover { background: #21262d; color: #ffffff; }
-    .btn-logout { display: block; padding: 10px; text-align: center; background: rgba(220, 38, 38, 0.15); color: #f87171; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600; }
-    .main-content { flex: 1; padding: 32px; overflow-y: auto; }
-    .header { margin-bottom: 24px; }
-    .header h1 { font-size: 24px; color: #fff; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px; }
-    .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; }
-    .stat-card span { font-size: 12px; color: #8b949e; text-transform: uppercase; font-weight: 600; }
-    .stat-card h2 { font-size: 24px; color: #f59e0b; margin-top: 6px; }
-    .link-box { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 32px; }
-    .link-box label { display: block; font-size: 13px; color: #8b949e; margin-bottom: 8px; }
-    .link-input-group { display: flex; gap: 10px; }
-    .link-input-group input { flex: 1; background: #0d1117; border: 1px solid #30363d; padding: 10px 14px; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
-    .btn-copy { background: #f59e0b; color: #0d0f12; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-    .table-container { background: #161b22; border: 1px solid #30363d; border-radius: 12px; overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-    th, td { padding: 14px 20px; border-bottom: 1px solid #30363d; }
-    th { background: #21262d; color: #8b949e; font-weight: 600; }
-    @media (max-width: 768px) {
-      .wrapper { flex-direction: column; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #30363d; }
-      .main-content { padding: 16px; }
-    }
+    body { background-color: #0c0d0e; color: #ffffff; padding-bottom: 40px; }
+    
+    /* Top Banner */
+    .banner { background-color: #f59e0b; color: #000; font-size: 13px; font-weight: 700; padding: 8px 16px; text-align: center; }
+    
+    /* Navbar */
+    .navbar { background-color: #121316; border-bottom: 1px solid #1f2227; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .btn-menu { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+    .logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: #fff; text-decoration: none; }
+    .logo-icon { background: #f59e0b; color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; }
+    .logo span { color: #f59e0b; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-icon { background: #1a1c23; border: 1px solid #2a2e37; color: #ccc; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .profile-avatar { background: #2a2e37; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid #3a3f4d; font-size: 14px; }
+
+    /* Layout Container */
+    .container { max-width: 520px; margin: 0 auto; padding: 20px 16px; }
+    .greeting { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
+    .greeting span { color: #f59e0b; }
+
+    /* Action Grid 2x2 */
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .action-card { background: #14161a; border: 1px solid #22262f; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: #fff; }
+    .action-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .action-title { font-weight: 700; font-size: 14px; }
+
+    /* Main Box */
+    .card-box { background: #14161a; border: 1px solid #22262f; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .card-title { font-size: 14px; color: #9ca3af; font-weight: 600; margin-bottom: 12px; }
+    
+    /* Saldo Section */
+    .saldo-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .saldo-amount { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 800; }
+    .coin-icon { background: #f59e0b; color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; }
+    .btn-eye { background: #1f232b; border: 1px solid #2e3440; color: #9ca3af; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+    .btn-withdraw { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 12px; color: #000; font-weight: 800; font-size: 15px; cursor: pointer; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* Sub Stats */
+    .sub-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .sub-card { background: #1a1d24; border: 1px solid #272c36; border-radius: 12px; padding: 12px 14px; }
+    .sub-card p { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
+    .sub-card h4 { font-size: 13px; color: #fff; font-weight: 700; }
+
+    /* Share Section */
+    .share-label { font-size: 12px; color: #9ca3af; margin-bottom: 8px; }
+    .input-share-box { background: #0c0d0e; border: 1px solid #272c36; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .input-share-box span { font-size: 13px; color: #d1d5db; }
+    .btn-copy-icon { background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 16px; }
+    .btn-share-full { width: 100%; padding: 12px; background: #1a1d24; border: 1px solid #272c36; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* Checklist Section (Sesuai Gambar 2) */
+    .checklist-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .checklist-title { font-size: 13px; color: #d1d5db; font-weight: 600; line-height: 1.4; }
+    .badge-percent { background: #f59e0b; color: #000; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 12px; }
+    .checklist-subtitle { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+    
+    .next-step-box { background: #1a1d24; border: 1px solid #272c36; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .next-step-text p { font-size: 11px; color: #9ca3af; margin-bottom: 2px; }
+    .next-step-text h5 { font-size: 14px; font-weight: 700; color: #fff; }
+    .btn-mulai { background: #f59e0b; color: #000; border: none; font-weight: 700; font-size: 13px; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+
+    .checklist-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #22262f; color: #d1d5db; font-size: 14px; font-weight: 600; }
+    .checklist-left { display: flex; align-items: center; gap: 12px; }
+    .circle-check { width: 20px; height: 20px; border: 2px solid #374151; border-radius: 50%; }
+
+    /* Riwayat Transaksi */
+    .tx-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .tx-title { font-size: 16px; font-weight: 800; }
+    .tx-link { color: #9ca3af; font-size: 13px; text-decoration: none; font-weight: 600; }
+    .tx-table-head { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; font-size: 12px; color: #9ca3af; font-weight: 600; margin-bottom: 16px; }
+    .empty-state { text-align: center; color: #6b7280; font-size: 13px; padding: 20px 0; }
   </style>
 </head>
 <body>
 
-  <div class="wrapper">
-    <div class="sidebar">
-      <div>
-        <div class="brand">🚀 WebsiteKu</div>
-        <ul class="menu">
-          <li><a href="/dashboard" class="active">Dashboard</a></li>
-          <li><a href="/jelyzx">Halaman Donatur</a></li>
-        </ul>
-      </div>
-      <a href="/logout" class="btn-logout">Logout</a>
+  <!-- Banner V2 -->
+  <div class="banner">
+    BagiBagi V2 - Silakan Refresh Cache Overlay di Obs - Happy streaming!
+  </div>
+
+  <!-- Navbar Header -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <button class="btn-menu">☰</button>
+      <a href="/dashboard" class="logo">
+        <div class="logo-icon">B</div>
+        BagiBagi<span>.co</span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-icon">🔔</div>
+      <div class="nav-icon">🌙</div>
+      <div class="profile-avatar">J</div>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <!-- Greeting -->
+    <div class="greeting">
+      Halo, <span>Jelyzx</span> 👋
     </div>
 
-    <div class="main-content">
-      <div class="header">
-        <h1>Dashboard Dukungan</h1>
+    <!-- 4 Tombol Menu -->
+    <div class="action-grid">
+      <a href="#" class="action-card"><div class="action-icon">👤</div><div class="action-title">Edit Halaman</div></a>
+      <a href="#" class="action-card"><div class="action-icon">🎛️</div><div class="action-title">Kontrol Overlay</div></a>
+      <a href="#" class="action-card"><div class="action-icon">✏️</div><div class="action-title">Edit Overlay</div></a>
+      <a href="#" class="action-card"><div class="action-icon">🛡️</div><div class="action-title">Filter & Moderasi</div></a>
+    </div>
+
+    <!-- Card Saldo -->
+    <div class="card-box">
+      <div class="card-title">Saldo saat ini</div>
+      <div class="saldo-flex">
+        <div class="saldo-amount">
+          <div class="coin-icon">B</div>
+          <span id="saldoValue">0</span>
+        </div>
+        <button class="btn-eye" onclick="toggleSaldo()">👁️</button>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span>Total Saldo</span>
-          <h2 id="totalSaldo">Rp 0</h2>
+      <button class="btn-withdraw">👛 Withdraw</button>
+
+      <div class="sub-stats">
+        <div class="sub-card">
+          <p>☆ Top supporter</p>
+          <h4 id="topSupporter">Tidak terdapat ...</h4>
         </div>
-        <div class="stat-card">
-          <span>Total Dukungan</span>
-          <h2 id="totalDonasi">0 Donasi</h2>
+        <div class="sub-card">
+          <p>Total bulan ini</p>
+          <h4 id="totalBulanIni">Belum ada</h4>
         </div>
       </div>
 
-      <div class="link-box">
-        <label>Link Halaman Dukunganmu:</label>
-        <div class="link-input-group">
-          <input type="text" id="shareLink" readonly>
-          <button class="btn-copy" onclick="copyLink()">Salin Link</button>
+      <div class="share-label">Link profil siap dibagikan ke penonton</div>
+      <div class="input-share-box">
+        <span id="shareUrlText">bagibagi.co/Jelyzx</span>
+        <button class="btn-copy-icon" onclick="copyShareUrl()">📋</button>
+      </div>
+      <button class="btn-share-full" onclick="copyShareUrl()">🔗 Bagikan Link ke Penonton</button>
+    </div>
+
+    <!-- Card Checklist 0 dari 4 Langkah Selesai -->
+    <div class="card-box">
+      <div class="checklist-header">
+        <div class="checklist-title">Lengkapi Langkah-Langkah<br>Dibawah</div>
+        <div class="badge-percent">0%</div>
+      </div>
+      <div class="checklist-subtitle">0 dari 4 langkah selesai</div>
+
+      <div class="next-step-box">
+        <div class="next-step-text">
+          <p>Langkah Berikutnya</p>
+          <h5>Update Bio</h5>
         </div>
+        <button class="btn-mulai">Mulai Sekarang</button>
       </div>
 
-      <h3>Dukungan Terbaru</h3>
-      <br>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Pengirim</th>
-              <th>Jumlah</th>
-              <th>Pesan</th>
-              <th>Tanggal</th>
-            </tr>
-          </thead>
-          <tbody id="donationTable">
-            <tr>
-              <td colspan="4" style="text-align: center; color: #8b949e; padding: 24px;">Memuat data...</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="checklist-item">
+        <div class="checklist-left"><div class="circle-check"></div> Update Bio</div>
+        <div>›</div>
+      </div>
+      <div class="checklist-item">
+        <div class="checklist-left"><div class="circle-check"></div> Hubungkan akun dengan bank</div>
+        <div>›</div>
+      </div>
+      <div class="checklist-item">
+        <div class="checklist-left"><div class="circle-check"></div> Pasang alert di OBS</div>
+        <div>›</div>
+      </div>
+      <div class="checklist-item">
+        <div class="checklist-left"><div class="circle-check"></div> Share link ke bio / chat</div>
+        <div>›</div>
       </div>
     </div>
+
+    <!-- Card Riwayat Transaksi -->
+    <div class="card-box">
+      <div class="tx-header">
+        <div class="tx-title">Riwayat Transaksi</div>
+        <a href="#" class="tx-link">Lihat Semua ›</a>
+      </div>
+      <div class="tx-table-head">
+        <div>Tipe</div>
+        <div>Jumlah</div>
+        <div>Pengirim/Penerima</div>
+        <div>Tangg...</div>
+      </div>
+      <div id="transaksiList">
+        <div class="empty-state">Belum ada transaksi bulan ini</div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // Set URL Donatur Sesuai Domain Aktif
-    const currentHost = window.location.origin;
-    document.getElementById('shareLink').value = `${currentHost}/jelyzx`;
+    const shareUrl = `${window.location.host}/Jelyzx`;
+    document.getElementById('shareUrlText').innerText = shareUrl;
 
-    function copyLink() {
-      const copyText = document.getElementById("shareLink");
-      copyText.select();
-      navigator.clipboard.writeText(copyText.value);
-      alert("Link donatur berhasil disalin!");
+    function copyShareUrl() {
+      navigator.clipboard.writeText(`https://${shareUrl}`);
+      alert("Link profil berhasil disalin!");
     }
 
-    // Fetch Data Real-time dari Express Backend
-    async function fetchDashboardData() {
-      try {
-        const res = await fetch('/api/donations');
-        const data = await res.json();
+    let isHidden = false;
+    let originalSaldo = "0";
 
-        if (data.status === 'success') {
-          document.getElementById('totalSaldo').innerText = `Rp ${data.totalSaldo.toLocaleString('id-ID')}`;
-          document.getElementById('totalDonasi').innerText = `${data.totalDonasi} Donasi`;
-
-          const tbody = document.getElementById('donationTable');
-          if (data.list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #8b949e; padding: 24px;">Belum ada dukungan masuk.</td></tr>`;
-          } else {
-            tbody.innerHTML = data.list.map(item => `
-              <tr>
-                <td><strong>${item.sender}</strong></td>
-                <td style="color: #f59e0b; font-weight: bold;">Rp ${item.amount.toLocaleString('id-ID')}</td>
-                <td>${item.message}</td>
-                <td>${item.date}</td>
-              </tr>
-            `).join('');
-          }
-        }
-      } catch (err) {
-        console.error("Gagal mengambil data dashboard:", err);
+    function toggleSaldo() {
+      const el = document.getElementById('saldoValue');
+      if (isHidden) {
+        el.innerText = originalSaldo;
+        isHidden = false;
+      } else {
+        el.innerText = "••••••";
+        isHidden = true;
       }
     }
 
-    fetchDashboardData();
+    async function loadData() {
+      try {
+        const res = await fetch('/api/donations');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        if (data && data.status === 'success') {
+          originalSaldo = (data.totalSaldo || 0).toLocaleString('id-ID');
+          document.getElementById('saldoValue').innerText = originalSaldo;
+          
+          if (data.list && data.list.length > 0) {
+            document.getElementById('topSupporter').innerText = data.list[0].sender;
+            document.getElementById('totalBulanIni').innerText = `Rp ${originalSaldo}`;
+
+            const container = document.getElementById('transaksiList');
+            container.innerHTML = data.list.map(item => `
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-top:1px solid #22262f;">
+                <div>
+                  <div style="font-weight:700; font-size:14px;">${item.sender}</div>
+                  <div style="font-size:12px; color:#9ca3af;">${item.message}</div>
+                </div>
+                <div style="color:#f59e0b; font-weight:800; font-size:14px;">+Rp ${(item.amount || 0).toLocaleString('id-ID')}</div>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (e) {
+        console.log("Error:", e.message);
+      }
+    }
+
+    loadData();
   </script>
 </body>
 </html>
