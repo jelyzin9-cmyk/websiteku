@@ -14,7 +14,8 @@
       <h2 class="h4 font-weight-bold mb-1">Buat Halaman Dukungan</h2>
       <p class="text-muted small mb-4">Gratis, siap terima donasi dalam beberapa menit</p>
 
-      <form action="/auth/register" method="POST">
+      <!-- Atribut 'novalidate' ditambahkan untuk mematikan pop-up error browser -->
+      <form action="/auth/register" method="POST" novalidate>
         
         <!-- Nama Tampilan -->
         <div class="form-group mb-3">
@@ -34,6 +35,55 @@
           <input 
             type="text" 
             name="username" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="jelyzx" 
+            required
+          >
+          <small class="form-text text-muted" style="font-size: 0.75rem; display: block; margin-top: 4px;">
+            *Gunakan huruf kecil/angka tanpa spasi (Contoh: devlop123)
+          </small>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Email</label>
+          <input 
+            type="text" 
+            name="email" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="nama@email.com" 
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mb-4">
+          <label class="form-label small text-muted">Password</label>
+          <input 
+            type="password" 
+            name="password" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="••••••••" 
+            required
+          >
+        </div>
+
+        <!-- Tombol Daftar -->
+        <button type="submit" class="btn btn-warning w-100 font-weight-bold py-2 mb-3">
+          Daftar
+        </button>
+
+      </form>
+
+      <div class="text-center small text-muted">
+        Sudah punya akun? <a href="/login" class="text-warning">Masuk</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
             class="form-control bg-dark border-gray-700 text-white" 
             placeholder="jelyzx" 
             pattern="[a-zA-Z0-9_-]+"
