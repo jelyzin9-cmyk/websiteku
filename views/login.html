@@ -1,52 +1,151 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masuk — Traktir</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/dashboard.css">
-<style>
-  body{display:flex;align-items:center;justify-content:center;min-height:100vh;}
-  .authcard{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;}
-  .authcard h1{font-size:19px;margin:0 0 4px;}
-  .authcard p{color:var(--muted);font-size:13px;margin:0 0 20px;}
-  .authcard .btn{width:100%;margin-top:18px;}
-  .switch-link{text-align:center;margin-top:16px;font-size:13px;color:var(--muted);}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk ke Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    body {
+      background-color: #0d0f12;
+      color: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    .header {
+      margin-bottom: 24px;
+    }
+    .header h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 13px;
+      color: #8b949e;
+    }
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #c9d1d9;
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    input:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    input::placeholder {
+      color: #484f58;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: #f59e0b;
+      border: none;
+      border-radius: 8px;
+      color: #0d0f12;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+    .btn-submit:hover {
+      background: #d97706;
+    }
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #8b949e;
+    }
+    .footer a {
+      color: #f59e0b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-<div class="authcard">
-  <h1>Masuk ke Dashboard</h1>
-  <p>Kelola halaman dukunganmu</p>
-  <form id="loginForm">
-    <label for="id">Email atau Username</label>
-    <input type="text" id="id" required>
-    <label for="pw">Password</label>
-    <input type="password" id="pw" required>
-    <button class="btn" type="submit">Masuk</button>
-    <div class="msg" id="msg"></div>
-  </form>
-  <div class="switch-link">Belum punya akun? <a href="/register" style="color:var(--gold);">Daftar</a></div>
-</div>
-<script>
-  document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById("msg");
-    msg.textContent = ""; msg.className = "msg";
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailOrUsername: document.getElementById("id").value, password: document.getElementById("pw").value }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      window.location.href = "/dashboard";
-    } catch (err) {
-      msg.textContent = err.message || "Gagal masuk";
-      msg.classList.add("err");
-    }
-  });
-</script>
+
+  <div class="login-card">
+    <div class="header">
+      <h2>Masuk ke Dashboard</h2>
+      <p>Kelola halaman dukunganmu</p>
+    </div>
+
+    <form action="/auth/login" method="POST" novalidate>
+      
+      <div class="form-group">
+        <label for="identity">Email atau Username</label>
+        <input 
+          type="text" 
+          id="identity" 
+          name="identity" 
+          placeholder="Masukkan email atau username" 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="••••••••" 
+          required 
+        />
+      </div>
+
+      <button type="submit" class="btn-submit">Masuk</button>
+
+    </form>
+
+    <div class="footer">
+      Belum punya akun? <a href="/register">Daftar</a>
+    </div>
+  </div>
+
 </body>
 </html>
