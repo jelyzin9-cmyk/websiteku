@@ -1,68 +1,109 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kirim Dukungan - WebsiteKu</title>
+  <title>Dukung jelyzx - BagiBagi</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0d0f12; color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .donate-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 28px 20px; width: 100%; max-width: 420px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); }
-    .profile-header { text-align: center; margin-bottom: 20px; }
-    .avatar { width: 70px; height: 70px; border-radius: 50%; background: #f59e0b; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 28px; font-weight: bold; color: #0d0f12; }
-    .profile-header h2 { font-size: 20px; color: #fff; }
-    .profile-header p { font-size: 13px; color: #8b949e; margin-top: 4px; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 13px; font-weight: 500; color: #c9d1d9; margin-bottom: 6px; }
-    input, textarea { width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
-    input:focus, textarea:focus { border-color: #f59e0b; }
-    .quick-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-    .btn-amount { background: #21262d; border: 1px solid #30363d; color: #fff; padding: 8px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600; text-align: center; }
-    .btn-amount:hover { border-color: #f59e0b; color: #f59e0b; }
-    .btn-pay { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 8px; color: #0d0f12; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
-    .btn-pay:hover { background: #d97706; }
+    body { background-color: #0c0d0e; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px 16px; }
+    
+    .card { background: #14161a; border: 1px solid #22262f; border-radius: 20px; width: 100%; max-width: 440px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    
+    /* Header Profile */
+    .profile-section { text-align: center; margin-bottom: 24px; }
+    .avatar { background: #f59e0b; color: #000; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; margin: 0 auto 12px; }
+    .username { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .bio { font-size: 13px; color: #9ca3af; }
+
+    /* Form Inputs */
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #d1d5db; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    input, textarea, select { width: 100%; background: #0c0d0e; border: 1px solid #272c36; border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 14px; outline: none; transition: 0.2s; }
+    input:focus, textarea:focus, select:focus { border-color: #f59e0b; }
+    
+    /* Quick Amounts */
+    .preset-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .btn-preset { background: #1a1d24; border: 1px solid #272c36; color: #d1d5db; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
+    .btn-preset:hover { border-color: #f59e0b; color: #f59e0b; }
+
+    /* Payment Options */
+    .payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .payment-option { background: #1a1d24; border: 1px solid #272c36; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
+    .payment-option:hover, .payment-option.active { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
+    .payment-option input { width: auto; margin: 0; }
+    .payment-badge { font-size: 12px; font-weight: 700; color: #fff; }
+
+    /* Submit Button */
+    .btn-submit { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 12px; color: #000; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    .btn-submit:hover { background: #d97706; }
   </style>
 </head>
 <body>
 
-  <div class="donate-card">
-    <div class="profile-header">
-      <div class="avatar" id="creatorAvatar">J</div>
-      <h2 id="creatorName">Jelyzx</h2>
-      <p>Dukung kreator ini untuk terus berkarya!</p>
+  <div class="card">
+    <div class="profile-section">
+      <div class="avatar">J</div>
+      <div class="username">jelyzx</div>
+      <div class="bio">Dukung kreator ini untuk terus berkarya!</div>
     </div>
 
     <form action="/api/donate" method="POST">
+      <!-- Nama -->
       <div class="form-group">
-        <label for="sender">Nama Pengirim</label>
-        <input type="text" id="sender" name="sender" placeholder="Nama kamu atau Anonim" required>
+        <label>Nama Pengirim</label>
+        <input type="text" name="sender" placeholder="Nama kamu atau Anonim" required>
       </div>
 
+      <!-- Jumlah Donasi -->
       <div class="form-group">
-        <label for="amount">Jumlah Dukungan (Rp)</label>
-        <input type="number" id="amount" name="amount" placeholder="10000" min="1000" required>
-        <div class="quick-amounts">
-          <button type="button" class="btn-amount" onclick="document.getElementById('amount').value=10000">Rp 10rb</button>
-          <button type="button" class="btn-amount" onclick="document.getElementById('amount').value=25000">Rp 25rb</button>
-          <button type="button" class="btn-amount" onclick="document.getElementById('amount').value=50000">Rp 50rb</button>
+        <label>Jumlah Dukungan (Rp)</label>
+        <input type="number" id="amountInput" name="amount" placeholder="10000" min="1000" required>
+        <div class="preset-btns">
+          <div class="btn-preset" onclick="setAmount(10000)">Rp 10rb</div>
+          <div class="btn-preset" onclick="setAmount(25000)">Rp 25rb</div>
+          <div class="btn-preset" onclick="setAmount(50000)">Rp 50rb</div>
         </div>
       </div>
 
+      <!-- Metode Pembayaran -->
       <div class="form-group">
-        <label for="message">Pesan Dukungan</label>
-        <textarea id="message" name="message" rows="3" placeholder="Semangat terus bikin kontennya!"></textarea>
+        <label>Pilih Metode Pembayaran</label>
+        <div class="payment-grid">
+          <label class="payment-option active">
+            <input type="radio" name="payment_method" value="qris" checked>
+            <span class="payment-badge">📱 QRIS / All E-Wallet</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="gopay">
+            <span class="payment-badge">🟢 GoPay</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="dana">
+            <span class="payment-badge">🔵 DANA</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="ovo">
+            <span class="payment-badge">🟣 OVO</span>
+          </label>
+        </div>
       </div>
 
-      <button type="submit" class="btn-pay">Kirim Dukungan Sekarang</button>
+      <!-- Pesan -->
+      <div class="form-group">
+        <label>Pesan Dukungan</label>
+        <textarea name="message" rows="3" placeholder="Semangat terus bikin kontennya!"></textarea>
+      </div>
+
+      <!-- Tombol Kirim -->
+      <button type="submit" class="btn-submit">Kirim Dukungan Sekarang 🚀</button>
     </form>
   </div>
 
   <script>
-    const pathName = window.location.pathname.replace('/', '').trim();
-    const username = pathName || 'Jelyzx';
-    document.getElementById('creatorName').innerText = username;
-    document.getElementById('creatorAvatar').innerText = username.charAt(0).toUpperCase();
+    function setAmount(val) {
+      document.getElementById('amountInput').value = val;
+    }
   </script>
 </body>
 </html>
