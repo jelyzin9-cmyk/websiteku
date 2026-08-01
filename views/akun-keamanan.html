@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akun & Keamanan — Traktir</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <div id="sidebar"></div>
+  <div>
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button class="menu-btn" id="menuBtn">☰</button><h1>Akun & Keamanan</h1></div>
+      <div style="display:flex;align-items:center;gap:12px;"><span class="userchip" id="userchip"></span><button class="logout-btn" id="logoutBtn">Keluar</button></div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h2>Ganti Password</h2>
+        <form id="pwForm">
+          <label for="currentPassword">Password Saat Ini</label>
+          <input type="password" id="currentPassword" required>
+          <label for="newPassword">Password Baru</label>
+          <input type="password" id="newPassword" minlength="8" required>
+          <button class="btn" type="submit" style="margin-top:14px;">Simpan</button>
+          <div class="msg" id="msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/dashboard.js"></script>
+<script>
+  document.getElementById("pwForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById("msg"); msg.textContent = ""; msg.className = "msg";
+    try {
+      const res = await fetch("/api/dashboard/password", {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: document.getElementById("currentPassword").value,
+          newPassword: document.getElementById("newPassword").value,
+        }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+      msg.textContent = "Password berhasil diganti."; msg.classList.add("ok");
+      document.getElementById("pwForm").reset();
+    } catch (err) { msg.textContent = err.message; msg.classList.add("err"); }
+  });
+</script>
+</body>
+</html>
