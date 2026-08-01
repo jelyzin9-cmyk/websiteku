@@ -4,58 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buat Halaman Dukungan</title>
-  <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #121212; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .card { background: #1e1e1e; padding: 28px; border-radius: 12px; width: 100%; max-width: 400px; border: 1px solid #333; }
-    h2 { margin: 0 0 6px 0; font-size: 22px; font-weight: bold; }
-    p { margin: 0 0 24px 0; color: #aaa; font-size: 13px; }
-    .form-group { margin-bottom: 16px; text-align: left; }
-    label { display: block; font-size: 13px; color: #ccc; margin-bottom: 6px; }
-    input { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
-    input:focus { border-color: #f59e0b; }
-    .hint { font-size: 11px; color: #888; margin-top: 5px; display: block; }
-    button { width: 100%; padding: 12px; background: #f59e0b; border: none; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 8px; }
-    button:hover { background: #d97706; }
-    .footer { text-align: center; margin-top: 20px; font-size: 13px; color: #aaa; }
-    .footer a { color: #f59e0b; text-decoration: none; }
-  </style>
+  <link rel="stylesheet" href="/dashboard.css">
 </head>
-<body>
+<body class="bg-dark text-white">
 
-  <div class="card">
-    <h2>Buat Halaman Dukungan</h2>
-    <p>Gratis, siap terima donasi dalam beberapa menit</p>
-
-    <form action="/register" method="POST" novalidate>
+  <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card bg-gray-900 border-gray-800 p-4 style-card" style="max-width: 400px; width: 100%;">
       
-      <div class="form-group">
-        <label>Nama Tampilan</label>
-        <input type="text" name="name" placeholder="Jelyzx" required>
+      <h2 class="h4 font-weight-bold mb-1">Buat Halaman Dukungan</h2>
+      <p class="text-muted small mb-4">Gratis, siap terima donasi dalam beberapa menit</p>
+
+      <!-- Mengirim data ke /auth/register dan novalidate mematikan pop-up bawaan browser -->
+      <form action="/auth/register" method="POST" novalidate>
+        
+        <!-- Nama Tampilan -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Nama Tampilan</label>
+          <input 
+            type="text" 
+            name="name" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="Jelyzx" 
+            required
+          >
+        </div>
+
+        <!-- Username -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Username (untuk link halamanmu)</label>
+          <input 
+            type="text" 
+            name="username" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="jelyzx" 
+            required
+          >
+          <small class="form-text text-muted" style="font-size: 0.75rem; display: block; margin-top: 4px;">
+            *Gunakan huruf kecil/angka tanpa spasi
+          </small>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mb-3">
+          <label class="form-label small text-muted">Email</label>
+          <input 
+            type="text" 
+            name="email" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="nama@email.com" 
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mb-4">
+          <label class="form-label small text-muted">Password</label>
+          <input 
+            type="password" 
+            name="password" 
+            class="form-control bg-dark border-gray-700 text-white" 
+            placeholder="••••••••" 
+            required
+          >
+        </div>
+
+        <!-- Tombol Daftar -->
+        <button type="submit" class="btn btn-warning w-100 font-weight-bold py-2 mb-3">
+          Daftar
+        </button>
+
+      </form>
+
+      <div class="text-center small text-muted">
+        Sudah punya akun? <a href="/login" class="text-warning">Masuk</a>
       </div>
 
-      <div class="form-group">
-        <label>Username (untuk link halamanmu)</label>
-        <input type="text" name="username" placeholder="jelyzx" required>
-        <span class="hint">*Gunakan huruf kecil/angka tanpa spasi</span>
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input type="text" name="email" placeholder="nama@email.com" required>
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="password" placeholder="••••••••" required>
-      </div>
-
-      <button type="submit">Daftar</button>
-
-    </form>
-
-    <div class="footer">
-      Sudah punya akun? <a href="/login">Masuk</a>
     </div>
   </div>
 
