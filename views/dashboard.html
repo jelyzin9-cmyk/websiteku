@@ -3,19 +3,260 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin</title>
+  <title>Dashboard Support</title>
   <style>
-    body { background: #0d0f12; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-    .box { background: #161b22; border: 1px solid #30363d; padding: 32px; border-radius: 12px; text-align: center; }
-    a { color: #f59e0b; text-decoration: none; font-weight: bold; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #0d0f12;
+      color: #c9d1d9;
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Layout Container */
+    .wrapper {
+      display: flex;
+      width: 100%;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #161b22;
+      border-right: 1px solid #30363d;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #f59e0b;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .menu {
+      list-style: none;
+    }
+    .menu li {
+      margin-bottom: 8px;
+    }
+    .menu a {
+      display: block;
+      padding: 10px 14px;
+      color: #8b949e;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .menu a.active, .menu a:hover {
+      background: #21262d;
+      color: #ffffff;
+    }
+    .btn-logout {
+      display: block;
+      padding: 10px;
+      text-align: center;
+      background: rgba(220, 38, 38, 0.15);
+      color: #f87171;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .btn-logout:hover {
+      background: rgba(220, 38, 38, 0.25);
+    }
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      font-size: 24px;
+      color: #fff;
+    }
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .stat-card span {
+      font-size: 12px;
+      color: #8b949e;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .stat-card h2 {
+      font-size: 24px;
+      color: #f59e0b;
+      margin-top: 6px;
+    }
+    /* Link Box */
+    .link-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    .link-box label {
+      display: block;
+      font-size: 13px;
+      color: #8b949e;
+      margin-bottom: 8px;
+    }
+    .link-input-group {
+      display: flex;
+      gap: 10px;
+    }
+    .link-input-group input {
+      flex: 1;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .btn-copy {
+      background: #f59e0b;
+      color: #0d0f12;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    /* Table */
+    .recent-section h3 {
+      color: #fff;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .table-container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #30363d;
+    }
+    th {
+      background: #21262d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    /* Responsive HP */
+    @media (max-width: 768px) {
+      .wrapper { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #30363d; }
+      .main-content { padding: 16px; }
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Selamat Datang di Dashboard! 🎉</h1>
-    <p>Kamu berhasil masuk secara resmi dengan session aktif.</p>
-    <br>
-    <a href="/logout">Logout / Keluar</a>
+
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <div class="brand">🚀 WebsiteKu</div>
+        <ul class="menu">
+          <li><a href="/dashboard" class="active">Dashboard</a></li>
+          <li><a href="#">Overlay Stream</a></li>
+          <li><a href="#">Pengaturan</a></li>
+          <li><a href="#">Penarikan</a></li>
+        </ul>
+      </div>
+      <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>Dashboard Dukungan</h1>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>Total Saldo</span>
+          <h2>Rp 0</h2>
+        </div>
+        <div class="stat-card">
+          <span>Dukungan Bulan Ini</span>
+          <h2>0 Donasi</h2>
+        </div>
+      </div>
+
+      <!-- Link Page -->
+      <div class="link-box">
+        <label>Link Halaman Dukunganmu:</label>
+        <div class="link-input-group">
+          <input type="text" value="https://ebsiteku.vercel.app/jelyzx" readonly>
+          <button class="btn-copy" onclick="alert('Link berhasil disalin!')">Salin Link</button>
+        </div>
+      </div>
+
+      <!-- Recent Support -->
+      <div class="recent-section">
+        <h3>Dukungan Terbaru</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Pengirim</th>
+                <th>Jumlah</th>
+                <th>Pesan</th>
+                <th>Tanggal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" style="text-align: center; color: #8b949e; padding: 24px;">Belum ada dukungan masuk.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
+
 </body>
 </html>
