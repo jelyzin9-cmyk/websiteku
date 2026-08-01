@@ -8,10 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #0c0d0e; color: #ffffff; padding-bottom: 40px; }
     
-    /* Top Banner */
     .banner { background-color: #f59e0b; color: #000; font-size: 13px; font-weight: 700; padding: 8px 16px; text-align: center; }
-    
-    /* Navbar */
     .navbar { background-color: #121316; border-bottom: 1px solid #1f2227; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
     .nav-left { display: flex; align-items: center; gap: 12px; }
     .btn-menu { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
@@ -22,42 +19,35 @@
     .nav-icon { background: #1a1c23; border: 1px solid #2a2e37; color: #ccc; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
     .profile-avatar { background: #2a2e37; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid #3a3f4d; font-size: 14px; }
 
-    /* Layout Container */
     .container { max-width: 520px; margin: 0 auto; padding: 20px 16px; }
     .greeting { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
     .greeting span { color: #f59e0b; }
 
-    /* Action Grid 2x2 */
     .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .action-card { background: #14161a; border: 1px solid #22262f; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: #fff; }
     .action-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .action-title { font-weight: 700; font-size: 14px; }
 
-    /* Main Box */
     .card-box { background: #14161a; border: 1px solid #22262f; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
     .card-title { font-size: 14px; color: #9ca3af; font-weight: 600; margin-bottom: 12px; }
     
-    /* Saldo Section */
     .saldo-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .saldo-amount { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 800; }
     .coin-icon { background: #f59e0b; color: #000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; }
     .btn-eye { background: #1f232b; border: 1px solid #2e3440; color: #9ca3af; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-    .btn-withdraw { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 12px; color: #000; font-weight: 800; font-size: 15px; cursor: pointer; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-withdraw { width: 100%; padding: 14px; background: #f59e0b; border: none; border-radius: 12px; color: #000; font-weight: 800; font-size: 15px; cursor: pointer; margin-bottom: 16px; }
 
-    /* Sub Stats */
     .sub-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
     .sub-card { background: #1a1d24; border: 1px solid #272c36; border-radius: 12px; padding: 12px 14px; }
     .sub-card p { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
     .sub-card h4 { font-size: 13px; color: #fff; font-weight: 700; }
 
-    /* Share Section */
     .share-label { font-size: 12px; color: #9ca3af; margin-bottom: 8px; }
     .input-share-box { background: #0c0d0e; border: 1px solid #272c36; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .input-share-box span { font-size: 13px; color: #d1d5db; }
     .btn-copy-icon { background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 16px; }
-    .btn-share-full { width: 100%; padding: 12px; background: #1a1d24; border: 1px solid #272c36; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-share-full { width: 100%; padding: 12px; background: #1a1d24; border: 1px solid #272c36; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; }
 
-    /* Checklist Section (Sesuai Gambar 2) */
     .checklist-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
     .checklist-title { font-size: 13px; color: #d1d5db; font-weight: 600; line-height: 1.4; }
     .badge-percent { background: #f59e0b; color: #000; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 12px; }
@@ -72,7 +62,6 @@
     .checklist-left { display: flex; align-items: center; gap: 12px; }
     .circle-check { width: 20px; height: 20px; border: 2px solid #374151; border-radius: 50%; }
 
-    /* Riwayat Transaksi */
     .tx-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .tx-title { font-size: 16px; font-weight: 800; }
     .tx-link { color: #9ca3af; font-size: 13px; text-decoration: none; font-weight: 600; }
@@ -82,12 +71,10 @@
 </head>
 <body>
 
-  <!-- Banner V2 -->
   <div class="banner">
     BagiBagi V2 - Silakan Refresh Cache Overlay di Obs - Happy streaming!
   </div>
 
-  <!-- Navbar Header -->
   <nav class="navbar">
     <div class="nav-left">
       <button class="btn-menu">☰</button>
@@ -104,13 +91,10 @@
   </nav>
 
   <div class="container">
-    
-    <!-- Greeting -->
     <div class="greeting">
       Halo, <span>Jelyzx</span> 👋
     </div>
 
-    <!-- 4 Tombol Menu -->
     <div class="action-grid">
       <a href="#" class="action-card"><div class="action-icon">👤</div><div class="action-title">Edit Halaman</div></a>
       <a href="#" class="action-card"><div class="action-icon">🎛️</div><div class="action-title">Kontrol Overlay</div></a>
@@ -118,7 +102,6 @@
       <a href="#" class="action-card"><div class="action-icon">🛡️</div><div class="action-title">Filter & Moderasi</div></a>
     </div>
 
-    <!-- Card Saldo -->
     <div class="card-box">
       <div class="card-title">Saldo saat ini</div>
       <div class="saldo-flex">
@@ -150,7 +133,6 @@
       <button class="btn-share-full" onclick="copyShareUrl()">🔗 Bagikan Link ke Penonton</button>
     </div>
 
-    <!-- Card Checklist 0 dari 4 Langkah Selesai -->
     <div class="card-box">
       <div class="checklist-header">
         <div class="checklist-title">Lengkapi Langkah-Langkah<br>Dibawah</div>
@@ -184,7 +166,6 @@
       </div>
     </div>
 
-    <!-- Card Riwayat Transaksi -->
     <div class="card-box">
       <div class="tx-header">
         <div class="tx-title">Riwayat Transaksi</div>
@@ -200,7 +181,6 @@
         <div class="empty-state">Belum ada transaksi bulan ini</div>
       </div>
     </div>
-
   </div>
 
   <script>
